@@ -606,15 +606,14 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   $('btnShare').onclick = async ()=>{
     const file = new File([ultimo.blob], nomeArquivo(), {type:'image/png'});
     if (navigator.canShare && navigator.canShare({files:[file]})){
-      await copiarTexto();
+      // só a imagem: ela já traz todas as informações, e assim o texto não se repete no WhatsApp
       try{
-        await navigator.share({files:[file], text:ultimo.texto});
-        $('okMsg').textContent='Enviado. Se o texto não apareceu junto da imagem, é só colar (ele já está copiado).';
-      }catch(e){ if(e.name!=='AbortError') $('okMsg').textContent='Não abriu o compartilhamento. Use "Baixar imagem" e "Copiar texto".'; }
+        await navigator.share({files:[file]});
+        $('okMsg').textContent='Imagem enviada.';
+      }catch(e){ if(e.name!=='AbortError') $('okMsg').textContent='Não abriu o compartilhamento. Use "Baixar imagem" e anexe no WhatsApp.'; }
     } else {
-      baixar(); await copiarTexto();
-      window.open('https://wa.me/?text='+encodeURIComponent(ultimo.texto),'_blank');
-      $('okMsg').textContent='Neste aparelho a imagem foi baixada e o texto copiado. No WhatsApp, anexe a imagem do comunicado.';
+      baixar();
+      $('okMsg').textContent='Neste aparelho a imagem foi baixada. No WhatsApp, anexe a imagem do comunicado.';
     }
   };
   $('btnBaixar').onclick = ()=>{ baixar(); $('okMsg').textContent='Imagem baixada.'; };
