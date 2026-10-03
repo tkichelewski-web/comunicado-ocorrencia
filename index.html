@@ -204,7 +204,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
         <label class="lab" for="descricao">Descrição do ocorrido <small>(sem nome do colaborador)</small></label>
         <textarea id="descricao" maxlength="1500" placeholder="O que a pessoa fazia, o que aconteceu e qual foi a consequência."></textarea>
         <div class="counter"><span id="cont">0</span>/1500</div>
-        <div class="err">Descreva o ocorrido (mínimo 15 caracteres).</div>
+        <div class="err">Descreva o ocorrido com pelo menos 15 caracteres, sem colar o texto de outro comunicado.</div>
       </div>
     </section>
 
@@ -367,7 +367,7 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
       item: $('selItem').value,
       complemento: $('complemento').value.trim(),
       frota: $('frota').value.trim(),
-      descricao: $('descricao').value.trim().replace(/\n{3,}/g,'\n\n'),
+      descricao: $('descricao').value.trim().replace(/^\s*descri[çc][ãa]o( do ocorrido)?\s*:?\s*/i,'').replace(/\n{3,}/g,'\n\n'),
       comunicado_por: nomeLimpo()
     };
   }
@@ -388,7 +388,7 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
     if(!d.grupo) e.push('grupo');
     if(!d.colecao) e.push('colecao');
     if(!d.item) e.push('item');
-    if(d.descricao.length<15) e.push('descricao');
+    if(d.descricao.length<15 || /comunicado de (acidente|incidente)|\*quando:\*|\*local:\*/i.test(d.descricao)) e.push('descricao');
     if(d.comunicado_por.length<3) e.push('nome');
     return e;
   }
@@ -606,11 +606,11 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   $('btnShare').onclick = async ()=>{
     const file = new File([ultimo.blob], nomeArquivo(), {type:'image/png'});
     if (navigator.canShare && navigator.canShare({files:[file]})){
-      // só a imagem: ela já traz todas as informações, e assim o texto não se repete no WhatsApp
+      // imagem com o texto como legenda (sem copiar nada automaticamente)
       try{
-        await navigator.share({files:[file]});
-        $('okMsg').textContent='Imagem enviada.';
-      }catch(e){ if(e.name!=='AbortError') $('okMsg').textContent='Não abriu o compartilhamento. Use "Baixar imagem" e anexe no WhatsApp.'; }
+        await navigator.share({files:[file], text:ultimo.texto});
+        $('okMsg').textContent='Enviado. Se a legenda não aparecer, toque em "Copiar texto" e cole na legenda da imagem.';
+      }catch(e){ if(e.name!=='AbortError') $('okMsg').textContent='Não abriu o compartilhamento. Use "Baixar imagem" e "Copiar texto".'; }
     } else {
       baixar();
       $('okMsg').textContent='Neste aparelho a imagem foi baixada. No WhatsApp, anexe a imagem do comunicado.';
