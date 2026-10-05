@@ -78,6 +78,14 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
 .acts .primary{grid-column:1/-1;margin:0}
 .ok-msg{color:var(--muted);font-size:.9rem;margin:6px 0 0;min-height:1.2em}
 .note{margin:-6px 0 12px;color:var(--muted);font-size:.88rem}
+.fotos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.fotos:empty{display:none}
+.foto{position:relative;aspect-ratio:1;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--field)}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto button{position:absolute;top:4px;right:4px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:1rem;cursor:pointer;line-height:1}
+.addfoto{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer}
+.addfoto.off{opacity:.5;pointer-events:none}
+.fotos-info{color:var(--muted);font-size:.88rem;margin:10px 0 0}
 </style>
 </head>
 <body>
@@ -209,6 +217,15 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
     </section>
 
     <section class="block">
+      <span class="lab">Fotos <small>(opcional, até 4)</small></span>
+      <p class="note" style="margin:0 0 10px">Vão junto com o comunicado no WhatsApp. Não ficam salvas na planilha.</p>
+      <div class="fotos" id="fotos"></div>
+      <label class="secondary addfoto" id="lblFotos" for="inFotos">📷 Tirar ou escolher foto</label>
+      <input type="file" id="inFotos" accept="image/*" multiple class="hidden">
+      <p class="err" id="erroFotos" style="display:none"></p>
+    </section>
+
+    <section class="block">
       <h2>Quem está comunicando</h2>
       <p class="note">Fica só no registro interno. Não aparece na imagem nem no texto enviado aos grupos.</p>
       <div class="field" data-f="nome">
@@ -232,6 +249,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
         <button class="secondary" id="btnBaixar">Baixar imagem</button>
         <button class="secondary" id="btnCopiar">Copiar texto</button>
       </div>
+      <p class="fotos-info hidden" id="fotosInfo"></p>
       <p class="ok-msg" id="okMsg" role="status"></p>
     </div>
     <button class="secondary" id="btnNovo" style="width:100%">Fazer novo comunicado</button>
@@ -340,6 +358,55 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
       montarLocais();
     });
   });
+
+  // ---------- Fotos (só para enviar no WhatsApp) ----------
+  const MAX_FOTOS = 4;
+  let fotos = []; // {blob, url}
+  function comprimir(file){
+    return new Promise((res,rej)=>{
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = ()=>{
+        const max=1600, k=Math.min(1, max/Math.max(img.naturalWidth,img.naturalHeight));
+        const c=document.createElement('canvas');
+        c.width=Math.round(img.naturalWidth*k); c.height=Math.round(img.naturalHeight*k);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob(b=> b ? res(b) : rej(new Error('falha')), 'image/jpeg', 0.82);
+      };
+      img.onerror = ()=>{ URL.revokeObjectURL(url); rej(new Error('formato')); };
+      img.src = url;
+    });
+  }
+  function renderFotos(){
+    const box=$('fotos'); box.innerHTML='';
+    fotos.forEach((f,i)=>{
+      const d=document.createElement('div'); d.className='foto';
+      d.innerHTML='<img alt="Foto '+(i+1)+'"><button type="button" aria-label="Remover foto '+(i+1)+'">✕</button>';
+      d.querySelector('img').src=f.url;
+      d.querySelector('button').onclick=()=>{ URL.revokeObjectURL(f.url); fotos.splice(i,1); $('erroFotos').style.display='none'; renderFotos(); };
+      box.appendChild(d);
+    });
+    $('lblFotos').classList.toggle('off', fotos.length>=MAX_FOTOS);
+    $('lblFotos').textContent = fotos.length>=MAX_FOTOS ? 'Limite de 4 fotos' : (fotos.length ? '📷 Adicionar outra foto' : '📷 Tirar ou escolher foto');
+  }
+  $('inFotos').addEventListener('change', async ()=>{
+    const err=$('erroFotos'); err.style.display='none';
+    const arquivos=[...$('inFotos').files];
+    $('inFotos').value='';
+    let ignoradas=0, falhas=0;
+    for (const f of arquivos){
+      if (fotos.length>=MAX_FOTOS){ ignoradas++; continue; }
+      try{ const b=await comprimir(f); fotos.push({blob:b, url:URL.createObjectURL(b)}); }
+      catch(e){ falhas++; }
+    }
+    renderFotos();
+    const msgs=[];
+    if (ignoradas) msgs.push(ignoradas+(ignoradas===1?' foto ficou de fora':' fotos ficaram de fora')+' (limite de 4).');
+    if (falhas) msgs.push('Não foi possível abrir '+(falhas===1?'uma das fotos':falhas+' fotos')+'.');
+    if (msgs.length){ err.textContent=msgs.join(' '); err.style.display='block'; }
+  });
+  function limparFotos(){ fotos.forEach(f=>URL.revokeObjectURL(f.url)); fotos=[]; renderFotos(); $('erroFotos').style.display='none'; }
 
   // ---------- Validação ----------
   function marcarErro(f){ const el=document.querySelector('.field[data-f="'+f+'"]'); if(el) el.classList.add('has-err'); }
@@ -584,6 +651,8 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
     $('codigoOut').textContent = codigo;
     $('preview').src = img.url;
     $('okMsg').textContent='';
+    $('fotosInfo').textContent = fotos.length ? '+ '+fotos.length+(fotos.length===1?' foto anexada':' fotos anexadas')+', que vão junto no compartilhamento.' : '';
+    $('fotosInfo').classList.toggle('hidden', !fotos.length);
     $('form').classList.add('hidden');
     $('resultado').classList.remove('hidden');
     window.scrollTo(0,0);
@@ -591,9 +660,13 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
 
   // ---------- Ações do resultado ----------
   const nomeArquivo = () => 'comunicado-'+ultimo.codigo+'.png';
+  function baixarUm(blob, nome){
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome;
+    document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  }
   function baixar(){
-    const a=document.createElement('a'); a.href=URL.createObjectURL(ultimo.blob); a.download=nomeArquivo();
-    document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+    baixarUm(ultimo.blob, nomeArquivo());
+    arquivosFotos().forEach((f,i)=>setTimeout(()=>baixarUm(f, f.name), 400*(i+1)));
   }
   async function copiarTexto(){
     try{ await navigator.clipboard.writeText(ultimo.texto); return true; }
@@ -603,26 +676,34 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
       ta.remove(); return ok;
     }
   }
+  function arquivosFotos(){
+    return fotos.map((f,i)=>new File([f.blob], 'foto-'+ultimo.codigo+'-'+(i+1)+'.jpg', {type:'image/jpeg'}));
+  }
   $('btnShare').onclick = async ()=>{
-    const file = new File([ultimo.blob], nomeArquivo(), {type:'image/png'});
-    if (navigator.canShare && navigator.canShare({files:[file]})){
-      // imagem com o texto como legenda (sem copiar nada automaticamente)
+    const card = new File([ultimo.blob], nomeArquivo(), {type:'image/png'});
+    const todos = [card, ...arquivosFotos()];
+    const pode = arr => navigator.canShare && navigator.canShare({files:arr});
+    if (pode(todos) || pode([card])){
+      const enviarTudo = pode(todos);
       try{
-        await navigator.share({files:[file], text:ultimo.texto});
-        $('okMsg').textContent='Enviado. Se a legenda não aparecer, toque em "Copiar texto" e cole na legenda da imagem.';
+        await navigator.share({files: enviarTudo ? todos : [card], text: ultimo.texto});
+        $('okMsg').textContent = (!enviarTudo && fotos.length)
+          ? 'O comunicado foi enviado, mas este aparelho não deixou mandar as fotos juntas. Envie as fotos direto pelo WhatsApp.'
+          : 'Enviado. Se a legenda não aparecer, toque em "Copiar texto" e cole na legenda da imagem.';
       }catch(e){ if(e.name!=='AbortError') $('okMsg').textContent='Não abriu o compartilhamento. Use "Baixar imagem" e "Copiar texto".'; }
     } else {
       baixar();
-      $('okMsg').textContent='Neste aparelho a imagem foi baixada. No WhatsApp, anexe a imagem do comunicado.';
+      $('okMsg').textContent='Neste aparelho a imagem foi baixada'+(fotos.length?' junto com as fotos':'')+'. No WhatsApp, anexe as imagens e use "Copiar texto" para a legenda.';
     }
   };
-  $('btnBaixar').onclick = ()=>{ baixar(); $('okMsg').textContent='Imagem baixada.'; };
+  $('btnBaixar').onclick = ()=>{ baixar(); $('okMsg').textContent = fotos.length ? 'Imagem e fotos baixadas.' : 'Imagem baixada.'; };
   $('btnCopiar').onclick = async ()=>{ $('okMsg').textContent = (await copiarTexto()) ? 'Texto copiado.' : 'Não foi possível copiar automaticamente.'; };
   $('btnNovo').onclick = ()=>{
     $('form').reset();
     ['tipo','turno','lado','atendimento'].forEach(n=>setSeg(n,''));
     ['selGrupo','selColecao','selItem'].forEach(id=>$(id).value='');
     $('cont').textContent='0';
+    limparFotos();
     iniciarCampos(); montarLocais();
     $('resultado').classList.add('hidden'); $('form').classList.remove('hidden');
     window.scrollTo(0,0);
