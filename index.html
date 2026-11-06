@@ -7,7 +7,7 @@
 <title>Comunicado de Ocorrência</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --verde:#07583C; --lima:#B3DD64; --laranja:#FDB952; --vermelho:#DF4636; --branco:#FFFFFF;
@@ -28,7 +28,7 @@
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Open Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45}
 .top{background:var(--verde);color:#fff;padding:18px 20px 16px;border-bottom:6px solid var(--lima)}
 .top .inner{max-width:680px;margin:0 auto}
 .top h1{margin:0;font-size:1.45rem;font-weight:800;line-height:1.15}
@@ -72,7 +72,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
 .notice.erro{background:color-mix(in srgb,var(--vermelho) 14%,var(--surface));border:1px solid var(--vermelho)}
 .notice.demo{background:color-mix(in srgb,var(--laranja) 20%,var(--surface));border:1px solid var(--laranja)}
 .hidden{display:none!important}
-#resultado .preview{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block;background:#fff}
+#resultado .preview{width:100%;max-width:420px;margin:0 auto;height:auto;border-radius:10px;border:1px solid var(--line);display:block;background:#fff}
 .code{font-size:1.6rem;font-weight:800;margin:2px 0 8px}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .acts .primary{grid-column:1/-1;margin:0}
@@ -86,18 +86,57 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
 .addfoto{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;cursor:pointer}
 .addfoto.off{opacity:.5;pointer-events:none}
 .fotos-info{color:var(--muted);font-size:.88rem;margin:10px 0 0}
+.linkbtn{background:none;border:0;color:var(--verde);font:inherit;font-weight:700;cursor:pointer;padding:6px 0;text-decoration:underline}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .linkbtn{color:var(--lima)}}
+:root[data-theme="dark"] .linkbtn{color:var(--lima)}
+.revisao{margin-top:12px;border:1.5px solid var(--laranja);border-radius:10px;padding:12px;background:color-mix(in srgb,var(--laranja) 10%,var(--surface))}
+.revisao h3{margin:0 0 6px;font-size:.95rem}
+.revisao ul{margin:0 0 10px;padding-left:18px;font-size:.9rem}
+.revisao li{margin:3px 0}
+.revisao del{color:var(--vermelho)}
+.revisao ins{text-decoration:none;font-weight:700}
+.revisao .novo{white-space:pre-wrap;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:.92rem;margin-bottom:10px}
+.revisao .row{display:flex;gap:8px;flex-wrap:wrap}
+.revisao .row button{flex:1 1 140px}
+.notice.info{background:color-mix(in srgb,var(--lima) 22%,var(--surface));border:1px solid var(--lima)}
+/* Ajuda */
+.top .inner{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.btn-ajuda{flex:none;min-height:40px;padding:6px 12px;border-radius:999px;border:1.5px solid rgba(255,255,255,.6);background:transparent;color:#fff;font:inherit;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap}
+.btn-ajuda:hover{background:rgba(255,255,255,.12)}
+dialog.ajuda{width:min(560px,calc(100% - 24px));max-height:calc(100% - 32px);overflow:auto;padding:0;border:0;border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog.ajuda::backdrop{background:rgba(7,40,28,.55)}
+.ajuda-cab{position:sticky;top:0;background:var(--verde);color:#fff;padding:16px 18px 14px;border-bottom:5px solid var(--lima);display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:1}
+.ajuda-cab h2{margin:0;font-size:1.15rem}
+.ajuda-cab button{width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;font-size:1.2rem;cursor:pointer}
+.ajuda-corpo{padding:6px 18px 18px}
+.ajuda-corpo h3{font-size:1rem;margin:18px 0 8px;scroll-margin-top:86px;display:flex;align-items:center;gap:8px}
+.ajuda-corpo h3 .tag{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--lima);color:#10241A}
+.passos{list-style:none;margin:0;padding:0;counter-reset:p}
+.passos li{counter-increment:p;position:relative;padding:0 0 12px 40px;font-size:.93rem}
+.passos li::before{content:counter(p);position:absolute;left:0;top:-2px;width:28px;height:28px;border-radius:50%;background:var(--verde);color:#fff;font-weight:700;display:grid;place-items:center;font-size:.85rem}
+.passos li b{display:block}
+.regras{margin:0;padding:0;list-style:none;font-size:.92rem}
+.regras li{padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--lima) 14%,var(--surface));margin-bottom:6px}
+.regras li.alerta{background:color-mix(in srgb,var(--laranja) 18%,var(--surface))}
+.ajuda-pe{padding:0 18px 18px}
+.linkbox{word-break:break-all;background:var(--field);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:.88rem;margin:8px 0 12px}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="inner">
-    <h1>Comunicado de ocorrência</h1>
-    <p>Preencha, salve e compartilhe a imagem nos grupos do WhatsApp.</p>
+    <div>
+      <h1>Comunicado de ocorrência</h1>
+      <p>Preencha, salve e compartilhe a imagem nos grupos do WhatsApp.</p>
+    </div>
+    <button type="button" class="btn-ajuda" id="btnAjuda" aria-haspopup="dialog">? Como funciona</button>
   </div>
 </header>
 
 <main>
   <div id="avisoDemo" class="notice demo hidden">Modo de teste: a planilha ainda não foi conectada, então nada é salvo e o código sai como TESTE.</div>
+
+  <div id="avisoRascunho" class="notice info hidden" role="status"></div>
 
   <form id="form" novalidate autocomplete="off">
     <section class="block">
@@ -199,7 +238,7 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
       </div>
       <div class="field">
         <label class="lab" for="complemento">Complemento do local <small>(fazenda, talhão, ponto exato)</small></label>
-        <input type="text" id="complemento" placeholder="Ex.: Fazenda Santa Ana 31801" maxlength="140">
+        <input type="text" id="complemento" spellcheck="true" lang="pt-BR" placeholder="Ex.: Fazenda Santa Ana 31801" maxlength="140">
       </div>
       <div class="field">
         <label class="lab" for="frota">Frota <small>(se houver equipamento ou veículo)</small></label>
@@ -210,8 +249,18 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
     <section class="block">
       <div class="field" data-f="descricao">
         <label class="lab" for="descricao">Descrição do ocorrido <small>(sem nome do colaborador)</small></label>
-        <textarea id="descricao" maxlength="1500" placeholder="O que a pessoa fazia, o que aconteceu e qual foi a consequência."></textarea>
+        <textarea id="descricao" maxlength="1500" spellcheck="true" lang="pt-BR" placeholder="O que a pessoa fazia, o que aconteceu e qual foi a consequência."></textarea>
         <div class="counter"><span id="cont">0</span>/1500</div>
+        <button type="button" class="linkbtn" id="btnRevisar">✓ Revisar português</button>
+        <div id="revisao" class="revisao hidden" role="region" aria-label="Sugestões de correção">
+          <h3 id="revTitulo">Sugestões de correção</h3>
+          <ul id="revLista"></ul>
+          <div class="novo" id="revTexto"></div>
+          <div class="row">
+            <button type="button" class="secondary" id="btnUsarRev" style="border-color:var(--verde)">Usar texto corrigido</button>
+            <button type="button" class="secondary" id="btnManterRev">Manter como escrevi</button>
+          </div>
+        </div>
         <div class="err">Descreva o ocorrido com pelo menos 15 caracteres, sem colar o texto de outro comunicado.</div>
       </div>
     </section>
@@ -237,7 +286,24 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
 
     <div id="erroEnvio" class="notice erro hidden" role="alert"></div>
     <button type="submit" class="primary" id="btnSalvar">Salvar e gerar comunicado</button>
+    <button type="button" class="secondary" id="btnRascunho" style="width:100%;margin-top:10px">Salvar como rascunho para revisão</button>
+    <p class="note" style="margin:8px 0 0;text-align:center">O rascunho gera um link para outra pessoa conferir, corrigir e enviar.
+      <button type="button" class="linkbtn" id="btnAjudaRasc" style="padding:2px 0">Como funciona o rascunho?</button></p>
   </form>
+
+  <section id="rascunhoOk" class="hidden">
+    <div class="block">
+      <h2 style="margin-bottom:6px">Rascunho salvo</h2>
+      <p class="note" style="margin:0">Mande este link para quem vai revisar. Ao abrir, a pessoa encontra tudo preenchido, pode corrigir e enviar o comunicado. As fotos não vão no rascunho; anexe na hora do envio.</p>
+      <div class="linkbox" id="linkRascunho"></div>
+      <div class="acts" style="margin-top:0">
+        <button class="primary" id="btnEnviarLink">Enviar link pelo WhatsApp</button>
+        <button class="secondary" id="btnCopiarLink">Copiar link</button>
+        <button class="secondary" id="btnVoltarEdicao">Continuar editando</button>
+      </div>
+      <p class="ok-msg" id="okRasc" role="status"></p>
+    </div>
+  </section>
 
   <section id="resultado" class="hidden">
     <div class="block">
@@ -256,6 +322,46 @@ input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid v
   </section>
 </main>
 
+<dialog class="ajuda" id="dlgAjuda" aria-labelledby="ajudaTitulo">
+  <div class="ajuda-cab">
+    <h2 id="ajudaTitulo">Como funciona o comunicado</h2>
+    <button type="button" id="btnFecharAjuda" aria-label="Fechar">✕</button>
+  </div>
+  <div class="ajuda-corpo">
+    <h3>📣 Comunicar uma ocorrência</h3>
+    <ol class="passos">
+      <li><b>Preencha o formulário</b>Tipo (acidente ou incidente), unidade, data, hora, turno, local e a descrição do que aconteceu. Se for acidente, informe a parte do corpo e o atendimento.</li>
+      <li><b>Toque em "Salvar e gerar comunicado"</b>Antes de salvar, o português da descrição é revisado. Se houver correções, você escolhe usar o texto corrigido ou manter como escreveu.</li>
+      <li><b>Compartilhe no WhatsApp</b>O comunicado vira uma imagem com número próprio (ex.: PB-2026-0012). Toque em "Compartilhar no WhatsApp" e escolha os grupos. As fotos que você anexou vão junto.</li>
+    </ol>
+
+    <h3 id="ajudaRascunho">📝 Salvar como rascunho <span class="tag">para revisão</span></h3>
+    <p style="margin:0 0 10px;font-size:.93rem">Use quando você quer que outra pessoa (por exemplo, o técnico de segurança) confira e corrija o comunicado antes de ele ser enviado.</p>
+    <ol class="passos">
+      <li><b>Preencha o que souber e coloque seu nome</b>No rascunho, só o nome é obrigatório.</li>
+      <li><b>Toque em "Salvar como rascunho para revisão"</b>Aparece um link do rascunho.</li>
+      <li><b>Mande o link para quem vai revisar</b>Use o botão "Enviar link pelo WhatsApp". Mande direto para a pessoa, não para os grupos.</li>
+      <li><b>Quem revisa abre o link, corrige e envia</b>O formulário abre todo preenchido. A pessoa completa, corrige e toca em "Salvar e gerar comunicado".</li>
+    </ol>
+    <ul class="regras">
+      <li>Pode mandar o link para mais de uma pessoa, e o rascunho pode ser corrigido e salvo quantas vezes for preciso.</li>
+      <li class="alerta">Combine para editar <b>uma pessoa de cada vez</b>. Se duas salvarem ao mesmo tempo, vale a última versão salva.</li>
+      <li>O comunicado só é enviado uma vez. Depois disso, o link do rascunho deixa de funcionar.</li>
+      <li class="alerta">As fotos não ficam no rascunho. Quem fizer o envio final anexa as fotos.</li>
+    </ul>
+
+    <h3>💡 Bom saber</h3>
+    <ul class="regras">
+      <li>Não escreva o nome do colaborador envolvido na descrição.</li>
+      <li>Seu nome fica só no registro interno. Ele não aparece na imagem nem no texto enviado aos grupos.</li>
+      <li>Seu nome e sua unidade ficam guardados neste celular para os próximos comunicados.</li>
+    </ul>
+  </div>
+  <div class="ajuda-pe">
+    <button type="button" class="primary" id="btnEntendi">Entendi</button>
+  </div>
+</dialog>
+
 <script>
 /* ====== CONFIGURAÇÃO: cole entre as aspas a "URL do app da Web" do Apps Script ======
    (começa com https://script.google.com/macros/s/ e termina com /exec) */
@@ -272,7 +378,7 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   const UNIDADES = {PB:'Pereira Barreto', JB:'Jaboticabal'};
   const DEMO = !CONFIG.APPS_SCRIPT_URL;
   const $ = id => document.getElementById(id);
-  const state = {tipo:'',unidade:'',turno:'',lado:'',atendimento:''};
+  const state = {tipo:'',unidade:'',turno:'',lado:'',atendimento:'',formato:'quadrado', rascunhoId:null}; // 1080x1080: aparece inteira no chat do WhatsApp
   let locaisDB = [];
   let ultimo = null;
   const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
@@ -408,6 +514,138 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   });
   function limparFotos(){ fotos.forEach(f=>URL.revokeObjectURL(f.url)); fotos=[]; renderFotos(); $('erroFotos').style.display='none'; }
 
+  // ---------- Chamada ao Apps Script ----------
+  async function chamar(payload){
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 40000);
+    let j;
+    try{
+      const r = await fetch(CONFIG.APPS_SCRIPT_URL, {method:'POST', body: JSON.stringify(payload), signal: ctrl.signal});
+      j = await r.json();
+    }catch(e){
+      throw new Error(e.name==='AbortError' ? 'a planilha demorou para responder' : 'sem conexão com a planilha');
+    }finally{ clearTimeout(t); }
+    if(!j || !j.ok) throw new Error(j && j.erro ? j.erro : 'resposta inválida');
+    return j;
+  }
+
+  // ---------- Revisão de português ----------
+  let textoRevisado = null;   // último texto já conferido
+  let sugestao = null;
+  function mostrarRevisao(r){
+    sugestao = r;
+    $('revTitulo').textContent = r.mudancas.length===1 ? '1 sugestão de correção' : r.mudancas.length+' sugestões de correção';
+    $('revLista').innerHTML = r.mudancas.slice(0,20).map(m=>'<li><del>'+esc(m.de||'(espaço)')+'</del> → <ins>'+esc(m.para||'(remover)')+'</ins></li>').join('')
+      + (r.mudancas.length>20 ? '<li>e mais '+(r.mudancas.length-20)+'…</li>' : '');
+    $('revTexto').textContent = r.corrigido;
+    $('revisao').classList.remove('hidden');
+    $('revisao').scrollIntoView({block:'center'});
+  }
+  async function revisarDescricao(){
+    const txt = $('descricao').value.trim();
+    if (txt.length < 3) return {ok:true, mudancas:[]};
+    return await chamar({acao:'revisar', texto: txt});
+  }
+  $('btnRevisar').addEventListener('click', async ()=>{
+    if (DEMO){ alert('A revisão de português funciona quando a planilha estiver conectada.'); return; }
+    const b=$('btnRevisar'); b.disabled=true; b.textContent='Revisando...';
+    try{
+      const r = await revisarDescricao();
+      textoRevisado = $('descricao').value.trim();
+      if (r.mudancas.length) mostrarRevisao(r);
+      else { $('revisao').classList.add('hidden'); b.textContent='✓ Nenhum erro encontrado'; setTimeout(()=>b.textContent='✓ Revisar português',2500); return; }
+    }catch(e){ alert('Não foi possível revisar agora: '+e.message); }
+    finally{ b.disabled=false; if(b.textContent==='Revisando...') b.textContent='✓ Revisar português'; }
+  });
+  $('btnUsarRev').addEventListener('click', ()=>{
+    if (!sugestao) return;
+    $('descricao').value = sugestao.corrigido;
+    $('cont').textContent = sugestao.corrigido.length;
+    textoRevisado = sugestao.corrigido.trim();
+    $('revisao').classList.add('hidden');
+  });
+  $('btnManterRev').addEventListener('click', ()=>{ textoRevisado = $('descricao').value.trim(); $('revisao').classList.add('hidden'); });
+  $('descricao').addEventListener('input', ()=>$('revisao').classList.add('hidden'));
+
+  // ---------- Rascunho ----------
+  const linkDoRascunho = id => location.origin + location.pathname + '?rascunho=' + id;
+  function dadosRascunho(){ const d = coletar(); delete d.comunicado_por; return d; }
+  function preencher_form(d){
+    if (d.tipo) setSeg('tipo', d.tipo);
+    document.querySelectorAll('input[name=classif]').forEach(c=>c.checked = (d.classificacao||[]).includes(c.value));
+    if (d.parte_corpo) $('parte').value = d.parte_corpo;
+    if (d.lado) setSeg('lado', d.lado);
+    if (d.status_atendimento) setSeg('atendimento', d.status_atendimento);
+    if (d.unidade) setSeg('unidade', d.unidade);
+    if (d.grupo){ $('selGrupo').value = d.grupo; montarLocais(); }
+    if (d.colecao){ $('selColecao').value = d.colecao; montarLocais(); }
+    if (d.item){ $('selItem').value = d.item; montarLocais(); }
+    if (d.data_ocorrencia) $('data').value = d.data_ocorrencia;
+    if (d.hora_ocorrencia) $('hora').value = d.hora_ocorrencia;
+    if (d.turno) setSeg('turno', d.turno);
+    $('complemento').value = d.complemento || '';
+    $('frota').value = d.frota || '';
+    $('descricao').value = d.descricao || '';
+    $('cont').textContent = $('descricao').value.length;
+  }
+  function tirarParametro(){ try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+  async function abrirRascunho(id){
+    const av=$('avisoRascunho');
+    if (DEMO){ av.textContent='Rascunhos funcionam quando a planilha estiver conectada.'; av.classList.remove('hidden'); return; }
+    av.textContent='Abrindo rascunho...'; av.classList.remove('hidden');
+    try{
+      const r = await fetch(CONFIG.APPS_SCRIPT_URL+'?acao=rascunho&id='+encodeURIComponent(id));
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.erro||'erro');
+      if (j.status !== 'ABERTO'){
+        av.textContent='Este rascunho já foi enviado como comunicado '+j.codigo+'. Para um novo comunicado, preencha o formulário.';
+        tirarParametro(); return;
+      }
+      state.rascunhoId = id;
+      preencher_form(j.dados || {});
+      av.textContent='Você está revisando o rascunho de '+j.autor+(j.atualizado?' (última edição por '+j.ultimo+' em '+j.atualizado+')':'')+'. Confira, corrija e toque em "Salvar e gerar comunicado".';
+    }catch(e){
+      av.textContent='Não foi possível abrir o rascunho ('+e.message+'). Confira se o link está completo.';
+      tirarParametro();
+    }
+  }
+  $('btnRascunho').addEventListener('click', async ()=>{
+    $('erroEnvio').classList.add('hidden');
+    $('nome').value = nomeLimpo();
+    if (nomeLimpo().length<3){ marcarErro('nome'); document.querySelector('.field[data-f="nome"]').scrollIntoView({block:'center'}); return; }
+    if (DEMO){ alert('O rascunho funciona quando a planilha estiver conectada.'); return; }
+    const b=$('btnRascunho'); b.disabled=true; b.textContent='Salvando rascunho...';
+    try{
+      const j = await chamar({acao:'salvar_rascunho', rascunho_id: state.rascunhoId||'', editado_por: nomeLimpo(), dados: dadosRascunho()});
+      state.rascunhoId = j.id;
+      salvarPrefs();
+      try{ history.replaceState(null,'',location.pathname+'?rascunho='+j.id); }catch(e){}
+      $('linkRascunho').textContent = linkDoRascunho(j.id);
+      $('okRasc').textContent='';
+      $('form').classList.add('hidden'); $('avisoRascunho').classList.add('hidden');
+      $('rascunhoOk').classList.remove('hidden');
+      window.scrollTo(0,0);
+    }catch(e){
+      const n=$('erroEnvio'); n.textContent='Não foi possível salvar o rascunho: '+e.message+'.'; n.classList.remove('hidden');
+    }finally{ b.disabled=false; b.textContent='Salvar como rascunho para revisão'; }
+  });
+  $('btnEnviarLink').addEventListener('click', async ()=>{
+    const link = linkDoRascunho(state.rascunhoId);
+    const tipo = state.tipo ? state.tipo.toLowerCase() : 'ocorrência';
+    const msg = '📝 Rascunho de comunicado de '+tipo+' para revisão. Abra, confira e envie:\n'+link;
+    if (navigator.share){ try{ await navigator.share({text: msg}); return; }catch(e){ if(e.name==='AbortError') return; } }
+    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  });
+  $('btnCopiarLink').addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText(linkDoRascunho(state.rascunhoId)); $('okRasc').textContent='Link copiado.'; }
+    catch(e){ $('okRasc').textContent='Não foi possível copiar. Selecione o link acima e copie.'; }
+  });
+  $('btnVoltarEdicao').addEventListener('click', ()=>{
+    $('rascunhoOk').classList.add('hidden'); $('form').classList.remove('hidden');
+    const av=$('avisoRascunho'); av.textContent='Editando o rascunho salvo. Ao salvar de novo, o mesmo link é atualizado.'; av.classList.remove('hidden');
+    window.scrollTo(0,0);
+  });
+
   // ---------- Validação ----------
   function marcarErro(f){ const el=document.querySelector('.field[data-f="'+f+'"]'); if(el) el.classList.add('has-err'); }
   function limparErro(f){ const el=document.querySelector('.field[data-f="'+f+'"]'); if(el) el.classList.remove('has-err'); }
@@ -463,16 +701,7 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   // ---------- Envio ----------
   async function registrar(d){
     if (DEMO) return d.unidade+'-'+d.data_ocorrencia.slice(0,4)+'-TESTE';
-    const ctrl = new AbortController();
-    const t = setTimeout(()=>ctrl.abort(), 40000);
-    let j;
-    try{
-      const r = await fetch(CONFIG.APPS_SCRIPT_URL, {method:'POST', body: JSON.stringify(d), signal: ctrl.signal});
-      j = await r.json();
-    }catch(e){
-      throw new Error(e.name==='AbortError' ? 'a planilha demorou para responder' : 'sem conexão com a planilha');
-    }finally{ clearTimeout(t); }
-    if(!j || !j.ok) throw new Error(j && j.erro ? j.erro : 'resposta inválida');
+    const j = await chamar(Object.assign({}, d, {rascunho_id: state.rascunhoId||''}));
     return j.codigo;
   }
 
@@ -489,11 +718,23 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
       if(first) first.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'center'});
       return;
     }
-    const btn=$('btnSalvar'); btn.disabled=true; btn.textContent='Salvando...';
+    const btn=$('btnSalvar');
+    // revisão automática do português antes de salvar (uma vez por texto)
+    const atual = $('descricao').value.trim();
+    if (!DEMO && atual !== textoRevisado){
+      btn.disabled=true; btn.textContent='Revisando o português...';
+      let r=null;
+      try{ r = await revisarDescricao(); }catch(e){ r=null; }
+      textoRevisado = atual;
+      btn.disabled=false; btn.textContent='Salvar e gerar comunicado';
+      if (r && r.mudancas && r.mudancas.length){ mostrarRevisao(r); return; }
+    }
+    btn.disabled=true; btn.textContent='Salvando...';
     try{
-      const codigo = await registrar(d);
+      const codigo = await registrar(coletar());
       salvarPrefs();
-      await mostrarResultado(codigo, d);
+      if (state.rascunhoId){ state.rascunhoId=null; tirarParametro(); $('avisoRascunho').classList.add('hidden'); }
+      await mostrarResultado(codigo, coletar());
     }catch(err){
       const n=$('erroEnvio');
       n.textContent = 'Não foi possível salvar: '+(err.message||'sem conexão')+'. Seus dados continuam no formulário. Confira o sinal de internet e tente de novo.';
@@ -555,101 +796,145 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
   }
   function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 
-  async function desenhar(codigo,d){
-    try{ await Promise.all(['800 48px Archivo','700 24px Archivo','600 24px Archivo','400 24px Archivo'].map(f=>document.fonts.load(f))); }catch(e){}
-    const W=1080, PAD=48, GAP=14, F='"Archivo", Arial, sans-serif';
+  async function desenhar(codigo,d,formato){
+    try{ await Promise.all(['800 48px "Open Sans"','700 24px "Open Sans"','600 24px "Open Sans"','400 24px "Open Sans"'].map(f=>document.fonts.load(f))); }catch(e){}
+    const W=1080, H = formato==='quadrado' ? 1080 : 1920, PAD=48, F='"Open Sans", Arial, sans-serif';
     const acid = d.tipo==='ACIDENTE';
     const cor = acid ? '#DF4636' : '#FDB952';
     const corTxt = acid ? '#FFFFFF' : '#3A2600';
-    const LAB='600 19px '+F, VAL='700 25px '+F, VAL_LH=32, CPAD=16;
-    const c=document.createElement('canvas'); const ctx=c.getContext('2d');
-    const inner=W-PAD*2;
+    const inner = W-PAD*2;
+    const c=document.createElement('canvas'); c.width=W; c.height=H;
+    const ctx=c.getContext('2d');
 
-    // Monta as linhas de caixas: cada linha = lista de [rótulo, valor]
-    const linhas = [];
-    linhas.push([['Data', fmtData(d.data_ocorrencia)], ['Hora', d.hora_ocorrencia], ['Turno', turnoTxt(d.turno)]]);
-    linhas.push([['Local', localTxt(d) + (d.complemento ? ' – '+d.complemento : '')]]);
+    const celulas = [];
+    celulas.push([['Data', fmtData(d.data_ocorrencia)], ['Hora', d.hora_ocorrencia], ['Turno', turnoTxt(d.turno)]]);
+    celulas.push([['Local', localTxt(d) + (d.complemento ? ' – '+d.complemento : '')]]);
     const meias = [];
     if (acid){ meias.push(['Parte do corpo atingida', parteTxt(d)]); meias.push(['Status do atendimento', d.status_atendimento]); }
     else meias.push(['Classificação', d.classificacao.join(' e ')]);
     if (d.frota) meias.push(['Frota', d.frota]);
-    for (let i=0;i<meias.length;i+=2) linhas.push(meias.slice(i,i+2));
+    for (let i=0;i<meias.length;i+=2) celulas.push(meias.slice(i,i+2));
 
-    // mede
-    const medidas = linhas.map(cel=>{
-      const w=(inner-GAP*(cel.length-1))/cel.length;
-      ctx.font=VAL;
-      const ls=cel.map(([k,v])=>quebrar(ctx, v, w-CPAD*2));
-      const h=CPAD+22+Math.max(...ls.map(l=>l.length))*VAL_LH+CPAD-4;
-      return {cel,w,ls,h};
-    });
-    ctx.font='400 25px '+F;
-    const descL = quebrar(ctx, d.descricao, inner-CPAD*2-8);
-    const HEAD=150, BAND=62, FOOT=70;
-    let H = HEAD+BAND+28;
-    medidas.forEach(m=>H+=m.h+GAP);
-    const descH = CPAD+30+descL.length*36+CPAD;
-    H += 10+descH+28+FOOT;
-    c.width=W; c.height=H;
+    // calcula o layout num fator de escala k (fontes e espaços)
+    function layout(k){
+      const L = {k, HEAD:Math.round(150*k), BAND:Math.round(62*k), GAP:Math.round(14*k), CPAD:Math.round(16*k),
+        LAB:Math.round(19*k), VAL:Math.round(25*k), VLH:Math.round(32*k), DESC:Math.round(25*k), DLH:Math.round(36*k),
+        FOOT:Math.round(70*k), TOPM:Math.round(28*k)};
+      ctx.font='700 '+L.VAL+'px '+F;
+      L.linhas = celulas.map(cel=>{
+        const w=(inner-L.GAP*(cel.length-1))/cel.length;
+        const ls=cel.map(([,v])=>quebrar(ctx, v, w-L.CPAD*2));
+        const h=L.CPAD*2+L.LAB+6+Math.max(...ls.map(l=>l.length))*L.VLH;
+        return {cel,w,ls,h};
+      });
+      ctx.font='400 '+L.DESC+'px '+F;
+      L.descL = quebrar(ctx, d.descricao, inner-L.CPAD*2-8);
+      L.descTitulo = Math.round(20*k);
+      L.descH = L.CPAD*2 + L.descTitulo + 10 + L.descL.length*L.DLH;
+      L.corpo = L.linhas.reduce((a,m)=>a+m.h+L.GAP,0) + L.descH;
+      L.disp = H - L.HEAD - L.BAND - L.FOOT - L.TOPM*2;
+      return L;
+    }
+    const kMax = formato==='quadrado' ? 1.4 : 2.2, kMin = 0.85;
+    let L=null;
+    for (let k=kMax; k>=kMin; k-=0.03){ L=layout(k); if (L.corpo<=L.disp) break; }
+    // se nem no menor tamanho couber, corta a descrição (o texto completo vai na legenda)
+    if (L.corpo > L.disp){
+      const sobra = L.disp - (L.corpo - L.descH) - (L.CPAD*2 + L.descTitulo + 10);
+      const cabem = Math.max(1, Math.floor(sobra / L.DLH));
+      L.descL = L.descL.slice(0, cabem);
+      L.descL[cabem-1] = L.descL[cabem-1].replace(/\s*\S*$/,'') + '… (texto completo na legenda)';
+      L.descH = L.CPAD*2 + L.descTitulo + 10 + L.descL.length*L.DLH;
+      L.corpo = L.linhas.reduce((a,m)=>a+m.h+L.GAP,0) + L.descH;
+    }
 
     ctx.fillStyle='#FFFFFF'; ctx.fillRect(0,0,W,H);
 
     // cabeçalho
-    ctx.fillStyle=cor; ctx.fillRect(0,0,W,HEAD);
+    const k=L.k;
+    ctx.fillStyle=cor; ctx.fillRect(0,0,W,L.HEAD);
     ctx.fillStyle=corTxt;
-    ctx.font='600 22px '+F; ctx.fillText('Comunicado de', PAD, 56);
-    ctx.font='800 60px '+F; ctx.fillText(acid?'ACIDENTE':'INCIDENTE', PAD, 118);
-    const tx=W-PAD-76, ty=38;
-    ctx.beginPath(); ctx.moveTo(tx+38,ty); ctx.lineTo(tx+76,ty+68); ctx.lineTo(tx,ty+68); ctx.closePath();
+    ctx.font='600 '+Math.round(22*k)+'px '+F; ctx.fillText('Comunicado de', PAD, Math.round(54*k));
+    ctx.font='800 '+Math.round(58*k)+'px '+F; ctx.fillText(acid?'ACIDENTE':'INCIDENTE', PAD, Math.round(116*k));
+    const ts=Math.round(76*k), tx=W-PAD-ts, ty=Math.round(38*k);
+    ctx.beginPath(); ctx.moveTo(tx+ts/2,ty); ctx.lineTo(tx+ts,ty+ts*0.9); ctx.lineTo(tx,ty+ts*0.9); ctx.closePath();
     ctx.fillStyle=corTxt; ctx.fill();
-    ctx.fillStyle=cor; ctx.font='800 44px '+F; ctx.textAlign='center'; ctx.fillText('!', tx+38, ty+61); ctx.textAlign='left';
+    ctx.fillStyle=cor; ctx.font='800 '+Math.round(44*k)+'px '+F; ctx.textAlign='center'; ctx.fillText('!', tx+ts/2, ty+ts*0.8); ctx.textAlign='left';
 
     // faixa unidade + código
-    let y=HEAD;
-    ctx.fillStyle='#07583C'; ctx.fillRect(0,y,W,BAND);
-    ctx.fillStyle='#B3DD64'; ctx.fillRect(0,y+BAND-5,W,5);
-    ctx.fillStyle='#FFFFFF'; ctx.font='700 26px '+F;
-    ctx.fillText('Unidade '+UNIDADES[d.unidade], PAD, y+39);
-    ctx.font='600 22px '+F; ctx.textAlign='right'; ctx.fillText('Nº '+codigo, W-PAD, y+39); ctx.textAlign='left';
-    y+=BAND+28;
+    let y=L.HEAD;
+    ctx.fillStyle='#07583C'; ctx.fillRect(0,y,W,L.BAND);
+    ctx.fillStyle='#B3DD64'; ctx.fillRect(0,y+L.BAND-Math.round(5*k),W,Math.round(5*k));
+    const tUni='Unidade '+UNIDADES[d.unidade], tCod='Nº '+codigo;
+    let kb=k;
+    for(;;){ // garante espaço entre a unidade e o número
+      ctx.font='700 '+Math.round(26*kb)+'px '+F; const a=ctx.measureText(tUni).width;
+      ctx.font='600 '+Math.round(22*kb)+'px '+F; const b=ctx.measureText(tCod).width;
+      if (a+b+60 <= inner || kb<=0.6) break; kb-=0.05;
+    }
+    const yb = y + L.BAND/2 + Math.round(8*kb);
+    ctx.fillStyle='#FFFFFF'; ctx.font='700 '+Math.round(26*kb)+'px '+F;
+    ctx.fillText(tUni, PAD, yb);
+    ctx.font='600 '+Math.round(22*kb)+'px '+F; ctx.textAlign='right'; ctx.fillText(tCod, W-PAD, yb); ctx.textAlign='left';
 
-    // caixas
-    medidas.forEach(m=>{
-      m.cel.forEach(([k],idx)=>{
-        const x=PAD+idx*(m.w+GAP);
-        ctx.fillStyle='#EEF5E4'; rr(ctx,x,y,m.w,m.h,12); ctx.fill();
-        ctx.fillStyle='#5A6A61'; ctx.font=LAB; ctx.fillText(k, x+CPAD, y+CPAD+16);
-        ctx.fillStyle='#15231C'; ctx.font=VAL;
-        m.ls[idx].forEach((l,n)=>ctx.fillText(l, x+CPAD, y+CPAD+22+VAL_LH*(n+1)-6));
+    // conteúdo centralizado no espaço disponível
+    y = L.HEAD + L.BAND + L.TOPM + Math.max(0, Math.floor((L.disp - L.corpo)/2));
+
+    L.linhas.forEach(m=>{
+      m.cel.forEach(([rot],idx)=>{
+        const x=PAD+idx*(m.w+L.GAP);
+        ctx.fillStyle='#EEF5E4'; rr(ctx,x,y,m.w,m.h,Math.round(12*k)); ctx.fill();
+        ctx.fillStyle='#5A6A61'; ctx.font='600 '+L.LAB+'px '+F; ctx.fillText(rot, x+L.CPAD, y+L.CPAD+L.LAB-3);
+        ctx.fillStyle='#15231C'; ctx.font='700 '+L.VAL+'px '+F;
+        m.ls[idx].forEach((l,n)=>ctx.fillText(l, x+L.CPAD, y+L.CPAD+L.LAB+6+L.VLH*(n+1)-Math.round(8*k)));
       });
-      y+=m.h+GAP;
+      y+=m.h+L.GAP;
     });
 
     // descrição
-    y+=10;
-    ctx.fillStyle='#F6F8F5'; rr(ctx,PAD,y,inner,descH,12); ctx.fill();
-    ctx.fillStyle=cor; rr(ctx,PAD,y,8,descH,4); ctx.fill();
-    ctx.fillStyle='#07583C'; ctx.font='700 20px '+F; ctx.fillText('Descrição do ocorrido', PAD+CPAD+8, y+CPAD+20);
-    ctx.fillStyle='#15231C'; ctx.font='400 25px '+F;
-    descL.forEach((l,n)=>ctx.fillText(l, PAD+CPAD+8, y+CPAD+30+36*(n+1)-8));
+    ctx.fillStyle='#F6F8F5'; rr(ctx,PAD,y,inner,L.descH,Math.round(12*k)); ctx.fill();
+    ctx.fillStyle=cor; rr(ctx,PAD,y,8,L.descH,4); ctx.fill();
+    ctx.fillStyle='#07583C'; ctx.font='700 '+L.descTitulo+'px '+F; ctx.fillText('Descrição do ocorrido', PAD+L.CPAD+8, y+L.CPAD+L.descTitulo-2);
+    ctx.fillStyle='#15231C'; ctx.font='400 '+L.DESC+'px '+F;
+    L.descL.forEach((l,n)=>ctx.fillText(l, PAD+L.CPAD+8, y+L.CPAD+L.descTitulo+10+L.DLH*(n+1)-Math.round(10*k)));
 
     // rodapé
-    ctx.fillStyle='#07583C'; ctx.fillRect(0,H-FOOT,W,FOOT);
-    ctx.fillStyle='#FFFFFF'; ctx.font='700 22px '+F;
-    ctx.fillText('Uso interno – não repassar fora dos grupos', PAD, H-27);
-    ctx.textAlign='right'; ctx.font='400 19px '+F; ctx.fillStyle='#B3DD64';
+    ctx.fillStyle='#07583C'; ctx.fillRect(0,H-L.FOOT,W,L.FOOT);
     const agora=new Date();
-    ctx.fillText('Registrado em '+agora.toLocaleDateString('pt-BR')+' '+agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}), W-PAD, H-28);
+    const tEsq='Uso interno – não repassar fora dos grupos';
+    const tDir='Registrado em '+agora.toLocaleDateString('pt-BR')+' '+agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    let kf=Math.min(k,1.4);
+    for(;;){ // diminui a fonte do rodapé até os dois textos caberem lado a lado
+      ctx.font='700 '+Math.round(21*kf)+'px '+F; const a=ctx.measureText(tEsq).width;
+      ctx.font='400 '+Math.round(18*kf)+'px '+F; const b=ctx.measureText(tDir).width;
+      if (a+b+40 <= inner || kf<=0.6) break; kf-=0.05;
+    }
+    const yf = H - L.FOOT/2 + Math.round(7*kf);
+    ctx.fillStyle='#FFFFFF'; ctx.font='700 '+Math.round(21*kf)+'px '+F;
+    ctx.fillText(tEsq, PAD, yf);
+    ctx.textAlign='right'; ctx.font='400 '+Math.round(18*kf)+'px '+F; ctx.fillStyle='#B3DD64';
+    ctx.fillText(tDir, W-PAD, yf);
     ctx.textAlign='left';
 
     return new Promise(res=>c.toBlob(b=>res({blob:b,url:c.toDataURL('image/png')}),'image/png'));
   }
 
-  async function mostrarResultado(codigo,d){
-    const img = await desenhar(codigo,d);
-    ultimo = {codigo, blob:img.blob, texto:montarTexto(codigo,d)};
-    $('codigoOut').textContent = codigo;
+  let pedidoDesenho = 0;
+  async function redesenhar(){
+    const meu = ++pedidoDesenho, formato = state.formato;
+    $('btnShare').disabled = true; $('btnBaixar').disabled = true;
+    const img = await desenhar(ultimo.codigo, ultimo.dados, formato);
+    if (meu !== pedidoDesenho) return; // o usuário trocou de formato no meio do caminho
+    ultimo.blob = img.blob;
     $('preview').src = img.url;
+    $('preview').dataset.formato = formato;
+    $('btnShare').disabled = false; $('btnBaixar').disabled = false;
+  }
+
+  async function mostrarResultado(codigo,d){
+    ultimo = {codigo, dados:d, blob:null, texto:montarTexto(codigo,d)};
+    await redesenhar();
+    $('codigoOut').textContent = codigo;
     $('okMsg').textContent='';
     $('fotosInfo').textContent = fotos.length ? '+ '+fotos.length+(fotos.length===1?' foto anexada':' fotos anexadas')+', que vão junto no compartilhamento.' : '';
     $('fotosInfo').classList.toggle('hidden', !fotos.length);
@@ -704,10 +989,30 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
     ['selGrupo','selColecao','selItem'].forEach(id=>$(id).value='');
     $('cont').textContent='0';
     limparFotos();
+    state.rascunhoId=null; textoRevisado=null; $('revisao').classList.add('hidden'); $('avisoRascunho').classList.add('hidden');
     iniciarCampos(); montarLocais();
     $('resultado').classList.add('hidden'); $('form').classList.remove('hidden');
     window.scrollTo(0,0);
   };
+
+  // ---------- Ajuda (popup) ----------
+  const dlg = $('dlgAjuda');
+  function abrirAjuda(secao){
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open','');
+    const alvo = secao ? $(secao) : null;
+    const corpo = dlg;
+    if (alvo) setTimeout(()=>alvo.scrollIntoView({block:'start'}), 30); else corpo.scrollTop = 0;
+  }
+  function fecharAjuda(){
+    if (typeof dlg.close === 'function') dlg.close(); else dlg.removeAttribute('open');
+    try{ localStorage.setItem('comunicado-ajuda-vista','1'); }catch(e){}
+  }
+  $('btnAjuda').addEventListener('click', ()=>abrirAjuda());
+  $('btnAjudaRasc').addEventListener('click', ()=>abrirAjuda('ajudaRascunho'));
+  $('btnFecharAjuda').addEventListener('click', fecharAjuda);
+  $('btnEntendi').addEventListener('click', fecharAjuda);
+  dlg.addEventListener('click', e=>{ if (e.target === dlg) fecharAjuda(); }); // toque fora fecha
+  dlg.addEventListener('cancel', ()=>{ try{ localStorage.setItem('comunicado-ajuda-vista','1'); }catch(e){} });
 
   // ---------- Início ----------
   function iniciarCampos(){
@@ -719,7 +1024,11 @@ const STATUS = ['Primeiros socorros no local','Encaminhado ao ambulatório','Enc
     $('data').max = $('data').value;
   }
   iniciarCampos();
-  carregarLocais();
+  const idLink = new URLSearchParams(location.search).get('rascunho');
+  // na primeira vez neste celular, abre a explicação (no link de rascunho, já na parte do rascunho)
+  let jaViu = false; try{ jaViu = localStorage.getItem('comunicado-ajuda-vista')==='1'; }catch(e){}
+  if (!jaViu) abrirAjuda(idLink ? 'ajudaRascunho' : null);
+  carregarLocais().then(()=>{ if (idLink) abrirRascunho(idLink); });
 })();
 </script>
 </body>
